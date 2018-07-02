@@ -94,7 +94,7 @@ while True:
     else:
         first_player, second_player = 'O', 'X'
         
-    print(f'{first_player} will play first')
+    print('{} will play first'.format(first_player))
     while not full_board_check(board):
         # first_player
         pos = player_choice(board)
@@ -103,7 +103,7 @@ while True:
         place_marker(board, first_player, pos)
         display_board(board)
         if win_check(board, first_player):
-            print(f'{first_player} wins!!!')
+            print('{} wins!!!'.format(first_player))
             win = True
             break
         # second_player
@@ -113,7 +113,7 @@ while True:
         place_marker(board, second_player, pos)
         display_board(board)
         if win_check(board, second_player):
-            print(f'{second_player} wins!!!')
+            print('{} wins!!!'.format(second_player))
             win = True
             break
     
