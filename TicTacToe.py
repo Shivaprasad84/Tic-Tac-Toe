@@ -34,18 +34,14 @@ def place_marker(board, marker, position):
 
 # check for all possible winning combinations
 def win_check(board, mark):
-    if board[1] == mark and board[2] == mark and board[3] == mark:
-        return True
-    elif board[4] == mark and board[5] == mark and board[6] == mark:
-        return True
-    elif board[7] == mark and board[8] == mark and board[9] == mark:
-        return True
-    elif board[1] == mark and board[5] == mark and board[9] == mark:
-        return True
-    elif board[3] == mark and board[5] == mark and board[7] == mark:
-        return True
-    else:
-        return False
+    return ((board[1] == mark and board[2] == mark and board[3] == mark) or
+           (board[4] == mark and board[5] == mark and board[6] == mark) or
+           (board[7] == mark and board[8] == mark and board[9] == mark) or
+           (board[1] == mark and board[4] == mark and board[7] == mark) or
+           (board[2] == mark and board[5] == mark and board[8] == mark) or
+           (board[3] == mark and board[6] == mark and board[9] == mark) or
+           (board[1] == mark and board[5] == mark and board[9] == mark) or
+           (board[3] == mark and board[5] == mark and board[7] == mark) )
 
 
 # Choosing the first player using random library
@@ -60,19 +56,22 @@ def space_check(board, position):
 
 # Check if the board is full or not
 def full_board_check(board):
-    return ' ' not in board[1:-1]
+    for i in range(1, len(board)):
+        if space_check(board, i):
+            return False
+    return True
 
 
 # Position to place the marker
 def player_choice(board):
-    position = int(input("Enter position (1-9)"))
-    if space_check(board, position):
-        return position
-    else:
-        while not(space_check(board, position)):
-            print("Position not empty")
-            position = int(input("Enter position (1-9)"))
-        return position
+    position = 0
+    if ' ' not in board:
+        return 100
+    while position not in [x for x in range(1, 10)] or not space_check(board, position):
+        position = int(input("Enter a position (1-9): "))
+
+    return position
+
 
 
 # Play again
@@ -86,6 +85,7 @@ def replay():
 
 # Actual game
 while True:
+    win = False
     print('Welcome to Tic Tac Toe!')
     board = ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
     player1, player2 = player_input()
@@ -98,19 +98,28 @@ while True:
     while not full_board_check(board):
         # first_player
         pos = player_choice(board)
+        if pos == 100:
+            break
         place_marker(board, first_player, pos)
         display_board(board)
         if win_check(board, first_player):
             print(f'{first_player} wins!!!')
+            win = True
             break
         # second_player
         pos = player_choice(board)
+        if pos == 100:
+            break
         place_marker(board, second_player, pos)
         display_board(board)
         if win_check(board, second_player):
             print(f'{second_player} wins!!!')
+            win = True
             break
     
+    if not win:
+        print("Its a Draw!")
+
     if not replay():
         break
     
